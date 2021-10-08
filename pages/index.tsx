@@ -13,12 +13,12 @@ const Home: NextPage = () => {
   if (user) {
     return (
       <div>
-        Welcome {user.name}! <link href="/api/auth/logout">Logout</link>
+        Welcome {user.name}! <Link href="/api/auth/logout">Logout</Link>
       </div>
     );
   }
 
-  return <link href="/api/auth/login">Login</link>;
+  return <Link href="/api/auth/login">Login</Link>;
 };
 
 export default Home;
