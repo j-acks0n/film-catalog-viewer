@@ -17,40 +17,6 @@ const MoviesGrid = ({ movies }: MoviesGridType) => {
         {movies.map((movie) => {
           return <MovieBox key={movie.id} movie={movie} />;
         })}
-
-        {/* {files.map((file) => (
-          <li key={file.name} className="relative">
-            <div
-              className={classNames(
-                file.current
-                  ? "ring-2 ring-offset-2 ring-indigo-500"
-                  : "focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500",
-                "group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 overflow-hidden"
-              )}
-            >
-              <img
-                src={file.source}
-                alt=""
-                className={classNames(
-                  file.current ? "" : "group-hover:opacity-75",
-                  "object-cover pointer-events-none"
-                )}
-              />
-              <button
-                type="button"
-                className="absolute inset-0 focus:outline-none"
-              >
-                <span className="sr-only">View details for {file.name}</span>
-              </button>
-            </div>
-            <p className="mt-2 block text-sm font-medium text-gray-900 truncate pointer-events-none">
-              {file.name}
-            </p>
-            <p className="block text-sm font-medium text-gray-500 pointer-events-none">
-              {file.size}
-            </p>
-          </li>
-        ))} */}
       </ul>
     </section>
   );
