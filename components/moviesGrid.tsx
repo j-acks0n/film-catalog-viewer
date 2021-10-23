@@ -1,5 +1,5 @@
 import MovieBox from "./movieBox";
-import type { Movies } from "../pages/index";
+import type { Movies } from "../utils/types";
 
 type MoviesGridType = {
   movies: Movies;

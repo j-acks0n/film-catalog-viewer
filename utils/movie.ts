@@ -19,9 +19,10 @@ export async function fetchAPI(param: string, query: string) {
 
 export async function getMostPopularMovies(pageNumber: number) {
   // const data = await fetchAPI("/search/movie", `&language=en-US&include_adult=false&query=${pageNumber}`);
+  console.log(pageNumber)
   const data = await fetchAPI(
     "/movie/popular",
-    `&language=en-US&include_adult=false&query=${pageNumber}`
+    `&language=en-US&include_adult=false&page=${pageNumber}`
   );
   return data;
 }
@@ -30,7 +31,7 @@ export async function getTopRatedMovies(pageNumber: number) {
   // const data = await fetchAPI("/search/movie", `&language=en-US&include_adult=false&query=${pageNumber}`);
   const data = await fetchAPI(
     "/movie/top_rated",
-    `&language=en-US&include_adult=false&query=${pageNumber}`
+    `&language=en-US&include_adult=false&page=${pageNumber}`
   );
   return data;
 }
@@ -42,11 +43,30 @@ export async function getMovieById(id: string) {
 
 
 
-export async function getSimilarMovies(movieId: number) {
+export async function getSimilarMovies(movieId: string) {
   // const data = await fetchAPI("/search/movie", `&language=en-US&include_adult=false&query=${pageNumber}`);
   const data = await fetchAPI(
     `/movie/${movieId}/similar`,
     `&language=en-US&page=1`
+  );
+  return data;
+}
+
+export async function getMovieReviews(movieId: string, pageNumber: number) {
+  // const data = await fetchAPI("/search/movie", `&language=en-US&include_adult=false&query=${pageNumber}`);
+  const data = await fetchAPI(
+    `/movie/${movieId}/reviews`,
+    `&language=en-US&page=${pageNumber}`
+  );
+  return data;
+}
+
+
+export async function getMovieCasts(movieId: string) {
+  // const data = await fetchAPI("/search/movie", `&language=en-US&include_adult=false&query=${pageNumber}`);
+  const data = await fetchAPI(
+    `/movie/${movieId}/credits`,
+    `&language=en-US`
   );
   return data;
 }

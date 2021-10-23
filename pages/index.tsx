@@ -1,24 +1,46 @@
-import { Movie } from "../utils/types";
+import { Movies } from "../utils/types";
 import { useUser } from "@auth0/nextjs-auth0";
 import Link from "next/link";
 import { getMostPopularMovies, getTopRatedMovies } from "../utils/movie";
-import Movies from "../components/moviesGrid";
-import React, { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ViewGridIcon as ViewGridIconSolid } from "@heroicons/react/solid";
 import MoviesGrid from "../components/moviesGrid";
 import useDidMountEffect from "../utils/useDidMountEffect";
 
-function classNames(...classes: any) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-const tabs = ["Most Popular", "Top Rated", "Favorited"];
-export type Movies = Movie[];
+export const tabs = [
+  { name: "Most Popular", href: "/" },
+  { name: "Top Rated", href: "/" },
+  { name: "Favorited", href: "/" },
+];
 export type HomeType = {
   movies: Movies;
+  numberOfPages: number;
 };
 
-const Home = ({ movies }: HomeType) => {
+function setLocalStorage(value: string) {
+  try {
+    window.localStorage.setItem("currentTab", JSON.stringify(value));
+  } catch (e) {
+    // catch possible errors:
+    // https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API
+  }
+}
+
+export function getLocalStorage(initialValue: string) {
+  try {
+    const value = window.localStorage.getItem("currentTab");
+    return value ? JSON.parse(value) : initialValue;
+  } catch (e) {
+    // if error, return initial value
+    return initialValue;
+  }
+}
+
+const Home = () => {
   // const { user, error, isLoading } = useUser();
 
   // if (isLoading) return <div>Loading...</div>;
@@ -38,37 +60,55 @@ const Home = ({ movies }: HomeType) => {
   //   </div>
   // );
   const [index, setIndex] = useState(1);
-  const [currentTab, setCurrentTab] = useState("Most Popular");
-  const [currentMovies, setCurrentMovies] = useState(movies);
+  const [currentTab, setCurrentTab] = useState(getLocalStorage("Most Popular"));
+  const [currentMovies, setCurrentMovies] = useState<Movies>([]);
+  const [numberOfPages, setNumberOfPages] = useState(1);
+  const start = index - 3 >= 1 ? index - 3 : index;
+  const end = index + 3 <= numberOfPages - 1 ? index + 3 : numberOfPages;
+  const paginationArray = Array.from(Array(numberOfPages).keys()).slice(
+    start,
+    end
+  );
 
   useEffect(() => {
     console.log(currentMovies);
   }, [currentMovies]);
 
-  async function retrievePopularMovies() {
-    try {
-      const movies = (await getMostPopularMovies(index)).results;
-      setCurrentMovies(movies);
-    } catch (e) {
-      console.error(e);
+  useEffect(() => {
+    async function retrievePopularMovies() {
+      try {
+        const moviesData = await getMostPopularMovies(index);
+        const numberOfPages = moviesData.total_pages;
+        const movies = moviesData.results;
+        if (index === 1) setNumberOfPages(numberOfPages);
+        setCurrentMovies(movies);
+      } catch (e) {
+        console.error(e);
+      }
     }
-  }
-  const retrieveTopRatedMovies = async () => {
-    try {
-      const movies = (await getTopRatedMovies(index)).results;
-      setCurrentMovies(movies);
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
-  useDidMountEffect(() => {
-    if (currentTab === "Most Popular") {
-      retrievePopularMovies();
-    } else if (currentTab === "Top Rated") {
-      retrieveTopRatedMovies();
+    async function retrieveTopRatedMovies() {
+      try {
+        const moviesData = await getTopRatedMovies(index);
+        const numberOfPages = moviesData.total_pages;
+        const movies = moviesData.results;
+        if (index === 1) setNumberOfPages(numberOfPages);
+        setCurrentMovies(movies);
+      } catch (e) {
+        console.error(e);
+      }
     }
+    async function retrieveMovies() {
+      if (currentTab === "Most Popular") {
+        retrievePopularMovies();
+      } else if (currentTab === "Top Rated") {
+        retrieveTopRatedMovies();
+      }
+    }
+    setLocalStorage(currentTab);
+    retrieveMovies();
   }, [currentTab, index]);
+
   return (
     <>
       <div className="flex-1 flex items-stretch overflow-hidden bg-gray-50">
@@ -115,39 +155,59 @@ const Home = ({ movies }: HomeType) => {
                   >
                     {tabs.map((tab) => (
                       <a
-                        key={tab}
-                        className={classNames(
-                          tab === currentTab
+                        key={tab.name}
+                        className={`${
+                          tab.name === currentTab
                             ? "border-indigo-500 text-indigo-600"
-                            : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
-                          "whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer"
-                        )}
+                            : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                        }
+                         whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer`}
                         onClick={() => {
-                          setCurrentTab(tab);
+                          setCurrentTab(tab.name);
+                          if (index !== 1) setIndex(1);
                         }}
                       >
-                        {tab}
+                        {tab.name}
                       </a>
                     ))}
                   </nav>
-                  <div className="hidden ml-6 bg-gray-100 p-0.5 rounded-lg items-center sm:flex">
-                    <button
-                      type="button"
-                      className="ml-0.5 bg-white p-1.5 rounded-md shadow-sm text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                    >
-                      <ViewGridIconSolid
-                        className="h-5 w-5"
-                        aria-hidden="true"
-                      />
-                      <span className="sr-only">Use grid view</span>
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
 
             {/* Gallery */}
             <MoviesGrid movies={currentMovies} />
+            <nav className="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0 mb-12">
+              <div className="-mt-px w-0 flex-1 flex"></div>
+              <div className="hidden md:-mt-px md:flex">
+                {paginationArray.map((number) => {
+                  if (number === index) {
+                    return (
+                      <a
+                        key={number}
+                        className="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
+                        aria-current="page"
+                      >
+                        {number}
+                      </a>
+                    );
+                  } else {
+                    return (
+                      <a
+                        key={number}
+                        className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
+                        onClick={() => {
+                          if (number !== index) setIndex(number);
+                        }}
+                      >
+                        {number}
+                      </a>
+                    );
+                  }
+                })}
+              </div>
+              <div className="-mt-px w-0 flex-1 flex justify-end"></div>
+            </nav>
           </div>
         </main>
 
@@ -157,22 +217,4 @@ const Home = ({ movies }: HomeType) => {
   );
 };
 
-export async function getStaticProps() {
-  //Call an external API endpoint to get posts
-  // const res = await fetch('https://api.themoviedb.org/3/movie/550?api_key=38b17f196cd011f46deca055abebe093')
-  // const movie = await res.json()
-  const movies = (await getMostPopularMovies(1)).results;
-  // By returning { props: { posts } }, the Blog component
-  // will receive `posts` as a prop at build time
-  // return {
-  //   props: {
-  //     movies
-  //   },
-  // }
-  return {
-    props: {
-      movies,
-    },
-  };
-}
 export default Home;

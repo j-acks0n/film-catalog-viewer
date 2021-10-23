@@ -2,7 +2,7 @@
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: ['images.unsplash.com', 'image.tmdb.org', 'critics.io'],
+    domains: ['images.unsplash.com', 'image.tmdb.org', 'critics.io', 'www.seekpng.com'],
   }, env: {
     NEXT_MOVIE_DB_API_KEY: process.env.NEXT_MOVIE_DB_API_KEY,
   }

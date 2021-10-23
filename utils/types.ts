@@ -27,6 +27,12 @@ export interface Movie {
     results: Video[];
   };
 }
+export interface AuthorDetails {
+  name: string;
+  username: string;
+  avatar_path: string | null;
+  rating: number;
+}
 
 export interface Video {
   id: string;
@@ -60,3 +66,32 @@ export interface SpokenLanguage {
   iso_639_1: number;
   name: string;
 }
+
+export interface Review {
+  author: string;
+  author_details: AuthorDetails;
+  content: string;
+  created_at: string;
+  id: string;
+  updated_at: string;
+  url: string;
+}
+
+export type Reviews = Review[];
+
+export interface Cast {
+  adult: string;
+  gender: number;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string;
+  cast_id: number;
+  character: string;
+  credit_id: string;
+  order: number;
+}
+
+export type Casts = Cast[];

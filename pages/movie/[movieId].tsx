@@ -1,19 +1,38 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { startOfPosterLink } from "../../components/movieBox";
-import { getMovieById } from "../../utils/movie";
-import { Movie } from "../../utils/types";
+import {
+  getMovieById,
+  getMovieCasts,
+  getMovieReviews,
+} from "../../utils/movie";
+import { Casts, Movie, Reviews } from "../../utils/types";
 import Image from "next/image";
-import { PaperClipIcon } from "@heroicons/react/solid";
+import { ArrowLeftIcon, StarIcon } from "@heroicons/react/solid";
 import Link from "next/link";
+import { classNames } from "../../utils/general";
+import Cast from "../../components/CastBox";
+import { useEffect, useState } from "react";
+import useDidMountEffect from "../../utils/useDidMountEffect";
 
 type MovieType = {
+  movieId: string;
   movie: Movie;
+  reviews: Reviews;
+  numberOfReviewPages: number;
+  casts: Casts;
 };
-const MovieDetailedView = ({ movie }: MovieType) => {
+
+const MovieDetailedView = ({
+  movieId,
+  movie,
+  reviews,
+  numberOfReviewPages,
+  casts,
+}: MovieType) => {
+  const router = useRouter();
   let trailerId;
   if (movie.videos) {
-    console.log(movie.videos);
     movie.videos.results.map((video) => {
       if (video.type === "Trailer") {
         trailerId = video.key;
@@ -21,6 +40,16 @@ const MovieDetailedView = ({ movie }: MovieType) => {
     });
   }
 
+  const [index, setIndex] = useState(1);
+  const [currentReviews, setCurrentReviews] = useState(reviews);
+
+  async function retrieveMovieReviews() {
+    const newReviews = (await getMovieReviews(movieId, index)).results;
+    setCurrentReviews(newReviews);
+  }
+  useDidMountEffect(() => {
+    retrieveMovieReviews();
+  }, [index]);
   let imgSRC = startOfPosterLink + movie.poster_path;
   imgSRC =
     imgSRC == "https://image.tmdb.org/t/p/w300null"
@@ -37,9 +66,22 @@ const MovieDetailedView = ({ movie }: MovieType) => {
   });
   return (
     <div className="bg-gray-50">
-      <div className="bg-white max-w-7xl mx-auto py-12 sm:px-6 lg:px-8 my-8 rounded-lg shadow ">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-2 gap-4 ">
+      <div className="bg-white max-w-7xl mx-6 md:mx-auto py-12 sm:px-6  my-8 rounded-lg shadow ">
+        <div className="max-w-6xl mx-auto">
+          <Link href={`/`} passHref>
+            <button
+              type="button"
+              className="ml-4 inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              onClick={() => router.back()}
+            >
+              <ArrowLeftIcon
+                className="-ml-0.5 mr-2 h-4 w-4"
+                aria-hidden="true"
+              />
+              Home
+            </button>
+          </Link>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-16 gap-y-32">
             <div className="text-center">
               {/* Image */}
 
@@ -59,7 +101,7 @@ const MovieDetailedView = ({ movie }: MovieType) => {
               {}
               {trailerId && (
                 <Link href={`/trailer/${movie.id}/${trailerId}`} passHref>
-                  <div onClick={() => {}}>Trailer</div>
+                  <div className="text-base cursor-pointer ">Watch Trailer</div>
                 </Link>
               )}
             </div>
@@ -128,74 +170,112 @@ const MovieDetailedView = ({ movie }: MovieType) => {
                         {movie.status}
                       </dd>
                     </div>
-                    <div className="sm:col-span-2">
-                      <dt className="text-sm font-medium text-gray-500">
-                        About
-                      </dt>
-                      <dd className="mt-1 text-sm text-gray-900">
-                        Fugiat ipsum ipsum deserunt culpa aute sint do nostrud
-                        anim incididunt cillum culpa consequat. Excepteur qui
-                        ipsum aliquip consequat sint. Sit id mollit nulla mollit
-                        nostrud in ea officia proident. Irure nostrud pariatur
-                        mollit ad adipisicing reprehenderit deserunt qui eu.
-                      </dd>
-                    </div>
-                    <div className="sm:col-span-2">
-                      <dt className="text-sm font-medium text-gray-500">
-                        Attachments
-                      </dt>
-                      <dd className="mt-1 text-sm text-gray-900">
-                        <ul
-                          role="list"
-                          className="border border-gray-200 rounded-md divide-y divide-gray-200"
-                        >
-                          <li className="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
-                            <div className="w-0 flex-1 flex items-center">
-                              <PaperClipIcon
-                                className="flex-shrink-0 h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                              <span className="ml-2 flex-1 w-0 truncate">
-                                resume_back_end_developer.pdf
-                              </span>
-                            </div>
-                            <div className="ml-4 flex-shrink-0">
-                              <a
-                                href="#"
-                                className="font-medium text-indigo-600 hover:text-indigo-500"
-                              >
-                                Download
-                              </a>
-                            </div>
-                          </li>
-                          <li className="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
-                            <div className="w-0 flex-1 flex items-center">
-                              <PaperClipIcon
-                                className="flex-shrink-0 h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                              <span className="ml-2 flex-1 w-0 truncate">
-                                coverletter_back_end_developer.pdf
-                              </span>
-                            </div>
-                            <div className="ml-4 flex-shrink-0">
-                              <a
-                                href="#"
-                                className="font-medium text-indigo-600 hover:text-indigo-500"
-                              >
-                                Download
-                              </a>
-                            </div>
-                          </li>
-                        </ul>
-                      </dd>
-                    </div>
                   </dl>
                 </div>
               </div>
             </div>
-            <div className="">2</div>
-            <div className="">3</div>
+            <div>
+              <div className="overflow-scroll list-none mx-4">
+                <div className="text-primary text-xl pl-2">Cast</div>
+                <div className="flex gap-4 overflow-scroll mt-8">
+                  {casts.map((cast) => {
+                    return <Cast cast={cast} key={cast.id} />;
+                  })}
+                </div>
+              </div>
+            </div>
+            {currentReviews.length > 0 && (
+              <div className="mx-4 md:mx-0">
+                <h2 className="text-lg font-medium text-gray-900">
+                  Recent reviews
+                </h2>
+                <div className="mt-6 pb-10 border-t border-gray-200 space-y-10" />
+
+                <div className="mt-16 lg:mt-0 lg:col-start-6 lg:col-span-7">
+                  <h3 className="sr-only">Recent reviews</h3>
+                  <div className="flow-root">
+                    <div className="-my-12 divide-y divide-gray-200">
+                      {currentReviews.map((review) => {
+                        return (
+                          <div key={review.id} className="py-12">
+                            <div className="flex items-center">
+                              <div className="">
+                                <h4 className="text-sm font-bold text-gray-900">
+                                  {review.author_details.username}
+                                </h4>
+                                <h5 className="text-sm text-gray-400 mt-2">
+                                  {review.created_at}
+                                </h5>
+                                <div className="mt-1 flex items-center">
+                                  {review.author_details.rating ? (
+                                    [0, 1, 2, 3, 4].map((rating) => (
+                                      <StarIcon
+                                        key={rating}
+                                        className={classNames(
+                                          review.author_details.rating > rating
+                                            ? "text-yellow-400"
+                                            : "text-gray-300",
+                                          "h-5 w-5 flex-shrink-0"
+                                        )}
+                                        aria-hidden="true"
+                                      />
+                                    ))
+                                  ) : (
+                                    <h5 className="text-sm text-gray-400">
+                                      Not rated
+                                    </h5>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div
+                              className="mt-4 space-y-6 text-base italic text-gray-600"
+                              dangerouslySetInnerHTML={{
+                                __html: review.content,
+                              }}
+                            />
+                          </div>
+                        );
+                      })}
+
+                      <nav className="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0 mb-12">
+                        <div className="-mt-px w-0 flex-1 flex"></div>
+                        <div className="hidden md:-mt-px md:flex">
+                          {Array.from(Array(numberOfReviewPages).keys()).map(
+                            (number) => {
+                              const actualNumber = number + 1;
+                              if (actualNumber === index) {
+                                return (
+                                  <a
+                                    className="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
+                                    aria-current="page"
+                                  >
+                                    {actualNumber}
+                                  </a>
+                                );
+                              } else {
+                                return (
+                                  <a
+                                    className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
+                                    onClick={() => {
+                                      setIndex(actualNumber);
+                                    }}
+                                  >
+                                    {actualNumber}
+                                  </a>
+                                );
+                              }
+                            }
+                          )}
+                        </div>
+                        <div className="-mt-px w-0 flex-1 flex justify-end"></div>
+                      </nav>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -206,10 +286,12 @@ const MovieDetailedView = ({ movie }: MovieType) => {
 export async function getServerSideProps(context: {
   params: { movieId: string };
 }) {
-  const id = context.params.movieId;
-  const movie = await getMovieById(id);
-  console.log(movie);
-  // Rest of `getServerSideProps` code
-  return { props: { movie } };
+  const movieId = context.params.movieId;
+  const movie = await getMovieById(movieId);
+  const reviewsData = await getMovieReviews(movieId, 1);
+  const numberOfReviewPages = reviewsData.page;
+  const reviews = reviewsData.results;
+  const casts = (await getMovieCasts(movieId)).cast.slice(0, 10);
+  return { props: { movieId, movie, reviews, numberOfReviewPages, casts } };
 }
 export default MovieDetailedView;
