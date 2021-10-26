@@ -1,3 +1,5 @@
+import { Movies } from "./types";
+
 const API_URL = "https://api.themoviedb.org/3";
 const API_KEY = process.env.NEXT_MOVIE_DB_API_KEY;
 
@@ -7,9 +9,7 @@ const API_KEY = process.env.NEXT_MOVIE_DB_API_KEY;
 export async function fetchAPI(param: string, query: string) {
   const URL = `${API_URL}${param}?api_key=${API_KEY}${query}`;
   const res = await fetch(URL);
-  //console.log(URL)
   const json = await res.json();
-  //console.log(json);
   if (json.errors) {
     console.error(json.errors);
     throw new Error("Failed to fetch API");
@@ -19,7 +19,6 @@ export async function fetchAPI(param: string, query: string) {
 
 export async function getMostPopularMovies(pageNumber: number) {
   // const data = await fetchAPI("/search/movie", `&language=en-US&include_adult=false&query=${pageNumber}`);
-  console.log(pageNumber)
   const data = await fetchAPI(
     "/movie/popular",
     `&language=en-US&include_adult=false&page=${pageNumber}`
@@ -41,8 +40,6 @@ export async function getMovieById(id: string) {
   return data;
 }
 
-
-
 export async function getSimilarMovies(movieId: string) {
   // const data = await fetchAPI("/search/movie", `&language=en-US&include_adult=false&query=${pageNumber}`);
   const data = await fetchAPI(
@@ -61,12 +58,17 @@ export async function getMovieReviews(movieId: string, pageNumber: number) {
   return data;
 }
 
-
 export async function getMovieCasts(movieId: string) {
   // const data = await fetchAPI("/search/movie", `&language=en-US&include_adult=false&query=${pageNumber}`);
-  const data = await fetchAPI(
-    `/movie/${movieId}/credits`,
-    `&language=en-US`
-  );
+  const data = await fetchAPI(`/movie/${movieId}/credits`, `&language=en-US`);
+  return data;
+}
+
+export async function fetchFavouritedMovies(favouritedMovieIds: string[]) {
+  let data: Movies = [];
+  for (var i = 0; i < favouritedMovieIds.length; i++) {
+    const movieData = await getMovieById(favouritedMovieIds[i]);
+    data.push(movieData);
+  }
   return data;
 }

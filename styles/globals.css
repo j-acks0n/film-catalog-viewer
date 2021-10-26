@@ -1,9 +1,25 @@
 /* ./styles/globals.css */
 @tailwind base;
 @tailwind components;
+.tooltip {
+  @apply invisible absolute;
+}
+
+.has-tooltip:hover .tooltip {
+  @apply visible z-50;
+}
 @tailwind utilities;
 @layer utilities {
   .justify-items-baseline {
     justify-items: baseline;
+  }
+  .heartIcon {
+    z-index: 1;
+    top: 10px;
+    left: 231px;
+  }
+  .alertTransform {
+    transform: translate(-50%, 0);
+    top: 450px;
   }
 }
