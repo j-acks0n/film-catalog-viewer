@@ -5,7 +5,6 @@ import { Movies } from "../../utils/types";
 import { getTopRatedMovies } from "../../utils/movie";
 import { useUser } from "@auth0/nextjs-auth0";
 import { getFavourites } from "../../utils/general";
-import { useRouter } from "next/router";
 
 interface TopRatedMoviesInterface {
   numberOfPages: number;
@@ -22,15 +21,6 @@ const TopRatedMovies = ({
   const currentTab = "Top Rated";
   const [index, setIndex] = useState<number>(originalIndex);
   const [favourites, setFavourites] = useState<string[]>([]);
-  // const [numOfPages, setNumOfPages] = useState(numberOfPages);
-
-  // useEffect(() => {
-  //   setNumOfPages(numberOfPages);
-  // }, [numberOfPages]);
-
-  // useEffect(() => {
-  //   setIndex(originalIndex);
-  // }, [originalIndex]);
   useEffect(() => {
     async function retrieveFavourites() {
       try {

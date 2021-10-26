@@ -1,17 +1,16 @@
 import { Cast } from "../utils/types";
-import { startOfPosterLink } from "./movieBox";
+import { startOfPosterLink } from "./MovieBox";
 import Image from "next/image";
 type CastType = {
   cast: Cast;
 };
 
 const CastBox = ({ cast }: CastType) => {
-  let imgSRC = startOfPosterLink + cast.profile_path;
-  imgSRC =
-    imgSRC === "https://image.tmdb.org/t/p/w500null"
+  const imgSRC =
+    startOfPosterLink + cast.profile_path ===
+    "https://image.tmdb.org/t/p/w500null"
       ? "https://www.seekpng.com/png/full/110-1100707_person-avatar-placeholder.png"
-      : imgSRC;
-  console.log(imgSRC);
+      : startOfPosterLink + cast.profile_path;
   return (
     <div>
       <div

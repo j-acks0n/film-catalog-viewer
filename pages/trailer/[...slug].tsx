@@ -46,7 +46,7 @@ const Trailer = ({ trailerId, similarMovies }: TrailerType) => {
               <div className="flex gap-4 overflow-scroll mt-8">
                 {similarMovies.slice(0, 5).map((similarMovie) => {
                   return (
-                    <MovieBox key={similarMovie.id} movie={similarMovie} />
+                    <MovieBox key={similarMovie.id} movie={similarMovie} isFavourited={false} />
                   );
                 })}
               </div>

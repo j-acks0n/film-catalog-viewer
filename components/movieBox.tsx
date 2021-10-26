@@ -171,12 +171,14 @@ const MovieBox = ({ movie, isFavourited }: MovieBoxType) => {
             </button>
           </div>
         </Link>
-        <p className="mt-2 block text-sm font-medium text-gray-900 truncate pointer-events-none">
-          {movie.title}
-        </p>
-        <p className="block text-sm font-medium text-gray-500 pointer-events-none">
-          {movie.release_date}
-        </p>
+        <div className="w-72 overflow-auto">
+          <p className="mt-2 block text-sm font-medium text-gray-900 truncate pointer-events-none">
+            {movie.title}
+          </p>
+          <p className="block text-sm font-medium text-gray-500 pointer-events-none">
+            {movie.release_date}
+          </p>
+        </div>
       </li>
     </>
   );

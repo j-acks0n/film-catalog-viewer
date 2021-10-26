@@ -11,8 +11,7 @@ import { ArrowLeftIcon, StarIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { classNames } from "../../utils/general";
 import Cast from "../../components/CastBox";
-import { useState } from "react";
-import useDidMountEffect from "../../utils/useDidMountEffect";
+import { useEffect, useState } from "react";
 
 type MovieType = {
   movieId: string;
@@ -42,19 +41,18 @@ const MovieDetailedView = ({
   const [index, setIndex] = useState(1);
   const [currentReviews, setCurrentReviews] = useState(reviews);
 
-  async function retrieveMovieReviews() {
-    const newReviews = (await getMovieReviews(movieId, index)).results;
-    setCurrentReviews(newReviews);
-  }
-  useDidMountEffect(() => {
+  useEffect(() => {
+    async function retrieveMovieReviews() {
+      const newReviews = (await getMovieReviews(movieId, index)).results;
+      setCurrentReviews(newReviews);
+    }
     retrieveMovieReviews();
-  }, [index]);
-  let imgSRC = startOfPosterLink + movie.poster_path;
-  imgSRC =
-    imgSRC == "https://image.tmdb.org/t/p/w300null"
-      ? "https://critics.io/img/movies/poster-placeholder.png"
+  }, [index, movieId]);
+  const imgSRC =
+    startOfPosterLink + movie.poster_path ===
+    "https://image.tmdb.org/t/p/w300null"
+      ? "https://image.tmdb.org/t/p/w300null"
       : startOfPosterLink + movie.poster_path;
-
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -247,6 +245,7 @@ const MovieDetailedView = ({
                               if (actualNumber === index) {
                                 return (
                                   <a
+                                    key={number}
                                     className="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
                                     aria-current="page"
                                   >
@@ -256,6 +255,7 @@ const MovieDetailedView = ({
                               } else {
                                 return (
                                   <a
+                                    key={number}
                                     className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium"
                                     onClick={() => {
                                       setIndex(actualNumber);
