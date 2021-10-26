@@ -41,10 +41,12 @@ const MovieBox = ({ movie, isFavourited }: MovieBoxType) => {
   const [hovered, eventHandlers] = useHover();
   const [favourited, setFavourited] = useState(isFavourited);
   const [heartHovered, setHeartHovered] = useState(false);
-  const [showAlert, setShowAlert] = useState<Boolean>(false);
-  let imgSRC = movie.poster_path
-    ? startOfPosterLink + movie.poster_path
-    : "https://critics.io/img/movies/poster-placeholder.png";
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  let imgSRC =
+    startOfPosterLink + movie.poster_path !==
+    "https://image.tmdb.org/t/p/w500null"
+      ? startOfPosterLink + movie.poster_path
+      : "https://critics.io/img/movies/poster-placeholder.png";
   const { user } = useUser();
 
   useEffect(() => {

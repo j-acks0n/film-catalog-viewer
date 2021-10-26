@@ -14,7 +14,6 @@ const removeMovieFromFavourite = async (email: string, movieId: string) => {
       movieId,
     },
   });
-  Router.reload();
 };
 
 const addMovieToFavourite = async (email: string, movieId: string) => {

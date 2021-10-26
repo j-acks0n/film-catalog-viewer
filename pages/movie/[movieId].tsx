@@ -1,6 +1,5 @@
-import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { startOfPosterLink } from "../../components/movieBox";
+import { startOfPosterLink } from "../../components/MovieBox";
 import {
   getMovieById,
   getMovieCasts,
@@ -12,7 +11,7 @@ import { ArrowLeftIcon, StarIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { classNames } from "../../utils/general";
 import Cast from "../../components/CastBox";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useDidMountEffect from "../../utils/useDidMountEffect";
 
 type MovieType = {

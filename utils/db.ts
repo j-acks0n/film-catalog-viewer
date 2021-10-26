@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "./prisma";
 
 const createUser = async (email: string) => {
-  const prisma = new PrismaClient();
   const user = await prisma.user.create({
     data: { email },
   });
@@ -11,7 +10,6 @@ const createUser = async (email: string) => {
 
 const getAllFavourites = async (email: string) => {
   let favouriteFilms: string[] | [] = [];
-  const prisma = new PrismaClient();
   const user = await prisma.user.findUnique({
     where: {
       email,
@@ -26,7 +24,6 @@ const getAllFavourites = async (email: string) => {
   return favouriteFilms;
 };
 const addToFavourite = async (email: string, movieId: string) => {
-  const prisma = new PrismaClient();
   const user = await prisma.user.findUnique({
     where: {
       email,
@@ -56,7 +53,6 @@ const addToFavourite = async (email: string, movieId: string) => {
 };
 
 const removeFromFavourite = async (email: string, movieId: string) => {
-  const prisma = new PrismaClient();
   const user = await prisma.user.findUnique({
     where: {
       email,
@@ -65,9 +61,9 @@ const removeFromFavourite = async (email: string, movieId: string) => {
   if (user) {
     if (user.favouriteFilms) {
       if (user.favouriteFilms.includes(movieId)) {
-        console.log(`before ${user.favouriteFilms} with id ${movieId}`)
-        user.favouriteFilms = user.favouriteFilms.filter(film => film !== movieId)
-        console.log(`after ${user.favouriteFilms}`)
+        user.favouriteFilms = user.favouriteFilms.filter(
+          (film: string) => film !== movieId
+        );
       }
     } else {
       user.favouriteFilms = [];

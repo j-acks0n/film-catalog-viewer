@@ -1,9 +1,9 @@
-import type { Movies } from "../index";
 import YouTube from "react-youtube";
 import { getSimilarMovies } from "../../utils/movie";
-import MovieBox from "../../components/movieBox";
+import MovieBox from "../../components/MovieBox";
 import { ArrowLeftIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
+import { Movies } from "../../utils/types";
 
 type TrailerType = {
   trailerId: string;
