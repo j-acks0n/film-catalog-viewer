@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [showSearch, setShowSearch] = useState<boolean>(false);
   return (
     <UserProvider>
-      <div className="relative h-screen flex w-full">
+      <div className="relative h-screen flex w-full overflow-hidden">
         {/* Narrow sidebar */}
 
         {/* Mobile menu */}

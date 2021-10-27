@@ -16,4 +16,15 @@
     top: 50%;
     transform: translate(-50%, -50%);
   }
+  .centraliseSearch {
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, -50%);
+  }
+  .crossIcon {
+    right: 40px;
+    top: 40px;
+    color: white;
+    z-index: 50;
+  }
 }

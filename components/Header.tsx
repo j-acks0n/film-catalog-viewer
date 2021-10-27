@@ -20,7 +20,7 @@ const Header = ({ setShowSearch }: HeaderInterface) => {
                 setShowSearch(true);
               }}
             >
-              <SearchIcon className="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
+              <SearchIcon className="-ml-0.5 mr-2 h-6 w-6" aria-hidden="true" />
               <span className="font-normal text-base">Search</span>
             </button>
           </div>

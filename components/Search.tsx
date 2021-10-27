@@ -1,38 +1,117 @@
+import { useUser } from "@auth0/nextjs-auth0";
+import { XIcon, SearchIcon } from "@heroicons/react/outline";
+import { useEffect, useState } from "react";
+import { ReactSearchAutocomplete } from "react-search-autocomplete";
+import { getFavourites } from "../utils/general";
+import { searchByText } from "../utils/movie";
+import Pagination from "./Pagination";
+import SearchMoviesGrid from "./SearchMoviesGrid";
+
 interface SearchInterface {
   setShowSearch: (showSearch: boolean) => void;
 }
 
+const initialisedSearchInfo = {
+  movies: [],
+  totalPages: 0,
+  totalResults: 0,
+};
 const Search = ({ setShowSearch }: SearchInterface) => {
+  const [searchInfo, setSearchInfo] = useState(initialisedSearchInfo);
+  const [index, setIndex] = useState(1);
+  const [query, setQuery] = useState("");
+  const [favourites, setFavourites] = useState<string[]>([]);
+  const { user } = useUser();
+
+  useEffect(() => {
+    async function retrieveFavourites() {
+      try {
+        const favourites = await getFavourites();
+        setFavourites(favourites);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    if (user) retrieveFavourites();
+  }, [user]);
+
+  useEffect(() => {
+    const handleOnSearch = async (string: string) => {
+      // onSearch will have as the first callback parameter
+      // the string searched and for the second the results.
+      const data = await await searchByText(string, index);
+      setSearchInfo({
+        movies: data.results,
+        totalPages: data.total_pages,
+        totalResults: data.total_results,
+      });
+    };
+    if (query === "") {
+      setSearchInfo(initialisedSearchInfo);
+    } else {
+      handleOnSearch(query);
+    }
+  }, [query, index]);
   return (
     <>
-      <div className="absolute centralise z-20">
-        <div className="relative text-gray-600">
-          <input
-            type="search"
-            name="serch"
-            placeholder="Search"
-            className="bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-none"
-          />
-          <button type="submit" className="absolute right-0 top-0 mt-3 mr-4">
-            <svg
-              className="h-4 w-4 fill-current"
-              xmlns="http://www.w3.org/2000/svg"
-              version="1.1"
-              id="Capa_1"
-              x="0px"
-              y="0px"
-              viewBox="0 0 56.966 56.966"
-              width="512px"
-              height="512px"
-            >
-              <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
-            </svg>
-          </button>
-        </div>
-      </div>
+      {/* <div className="absolute centraliseSearch z-20"> */}
       <div
-        className="absolute top-0 left-0 z-10 w-full h-full bg-black opacity-70"
-        onClick={() => {setShowSearch(false)}}
+        className="absolute top-0 left-0  bottom-0 right-0 w-full h-full overflow-hidden z-50"
+      >
+        <XIcon
+          className="absolute w-8 h-8 crossIcon hover:text-indigo-500 cursor-pointer"
+          onClick={() => {
+            setShowSearch(false);
+          }}
+        />
+
+        <div className="relative">
+          <div className="mt-24 flex justify-center items-center">
+            <div className="relative">
+              <div className="">
+                <div className="absolute top-3 left-3">
+                  <SearchIcon className="text-gray-400 z-20 hover:text-gray-500 w-8 h-8" />
+                </div>
+                <input
+                  type="text"
+                  className="h-14 w-80 pl-12 pr-6 rounded-lg z-0 focus:shadow focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent"
+                  placeholder="Search for a movie..."
+                  onChange={(event) => {
+                    setQuery(event.target.value);
+                  }}
+                  value={query}
+                  autoFocus
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="relative mt-10 h-4/5 overflow-auto">
+          {searchInfo.movies.length && (
+            <div className="px-8 bg-white pt-12 pb-6 my-10 rounded-lg mx-10  overflow-scoll ">
+              <div className="text-center sm:text-justify sm:pl-14">About {searchInfo.totalResults} results</div>
+              <SearchMoviesGrid movies={searchInfo.movies} favourites={favourites} />
+              <Pagination index={index} currentTab={"Search"} setIndex={setIndex} numberOfPages={searchInfo.totalPages} />
+            </div>
+          )}
+        </div>
+
+        {/* <div className="mx-auto">
+          <div className="flex overflow-scroll">
+            {movies.map((movie) => {
+              return (
+                <MovieBox movie={movie} key={movie.id} isFavourited={false} />
+              );
+            })}
+          </div>
+        </div> */}
+      </div>
+
+      <div
+        className="absolute top-0 left-0 z-10 w-full h-full bg-black opacity-70 overflow-hidden"
+        onClick={() => {
+          setShowSearch(false);
+        }}
       />
     </>
   );

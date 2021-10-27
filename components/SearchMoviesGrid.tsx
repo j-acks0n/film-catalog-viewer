@@ -1,11 +1,11 @@
 import MovieBox from "./MovieBox";
 import type { Movies } from "../utils/types";
 
-type MoviesGridType = {
+type SearchMoviesGridType = {
   movies: Movies;
   favourites: string[];
 };
-const MoviesGrid = ({ movies, favourites}: MoviesGridType) => {
+const SearchMoviesGrid = ({ movies, favourites}: SearchMoviesGridType) => {
   return (
     <section className="mt-8 pb-16" aria-labelledby="gallery-heading">
       <h2 id="gallery-heading" className="sr-only">
@@ -13,7 +13,7 @@ const MoviesGrid = ({ movies, favourites}: MoviesGridType) => {
       </h2>
       <ul
         role="list"
-        className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 xl:gap-x-8 justify-items-center "
+        className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-1 sm:gap-x-6 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 xl:gap-x-8 justify-items-center "
       >
         {movies.map((movie) => {
           return <MovieBox key={movie.id} movie={movie} isFavourited={favourites.includes(movie.id.toString()) ? true : false}/>;
@@ -23,4 +23,4 @@ const MoviesGrid = ({ movies, favourites}: MoviesGridType) => {
   );
 };
 
-export default MoviesGrid;
+export default SearchMoviesGrid;

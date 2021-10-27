@@ -62,7 +62,7 @@ const MovieDetailedView = ({
     //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
   });
   return (
-    <div className="bg-gray-50">
+    <div className="bg-gray-50 overflow-scroll">
       <div className="bg-white max-w-7xl mx-6 md:mx-auto py-12 sm:px-6  my-8 rounded-lg shadow ">
         <div className="max-w-6xl mx-auto">
           <Link href={`/`} passHref>
@@ -172,14 +172,16 @@ const MovieDetailedView = ({
               </div>
             </div>
             <div>
-              <div className="overflow-scroll list-none mx-4">
-                <div className="text-primary text-xl pl-2">Cast</div>
-                <div className="flex gap-4 overflow-scroll mt-8">
-                  {casts.map((cast) => {
-                    return <Cast cast={cast} key={cast.id} />;
-                  })}
+              {casts.length > 0 && (
+                <div className="overflow-scroll list-none mx-4">
+                  <div className="text-primary text-xl pl-2">Cast</div>
+                  <div className="flex gap-4 overflow-scroll mt-8">
+                    {casts.map((cast) => {
+                      return <Cast cast={cast} key={cast.id} />;
+                    })}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
             {currentReviews.length > 0 && (
               <div className="mx-4 md:mx-0">

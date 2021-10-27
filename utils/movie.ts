@@ -17,6 +17,15 @@ export async function fetchAPI(param: string, query: string) {
   return json;
 }
 
+export async function searchByText(query: string, index:number) {
+  // const data = await fetchAPI("/search/movie", `&language=en-US&include_adult=false&query=${pageNumber}`);
+  const data = await fetchAPI(
+    "/search/movie",
+    `&language=en-US&page=${index}&include_adult=false&query=${query}`
+  );
+  return data;
+}
+
 export async function getMostPopularMovies(pageNumber: number) {
   // const data = await fetchAPI("/search/movie", `&language=en-US&include_adult=false&query=${pageNumber}`);
   const data = await fetchAPI(
