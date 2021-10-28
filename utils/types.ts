@@ -95,3 +95,10 @@ export interface Cast {
 }
 
 export type Casts = Cast[];
+
+export interface Genre {
+  id: number;
+  name: string;
+}
+
+export type Genres = Genre[];

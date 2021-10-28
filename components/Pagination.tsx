@@ -48,6 +48,9 @@ const Pagination = ({
                     } else if (currentTab === "Top Rated") {
                       setIndex(number);
                       router.push(`/top_rated_movies/${number}`);
+                    } else if (currentTab === "Discover") {
+                      setIndex(number);
+                      router.push(`/discover/${number}`);
                     }
                   }
                 }}

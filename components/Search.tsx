@@ -56,7 +56,7 @@ const Search = ({ setShowSearch }: SearchInterface) => {
     <>
       {/* <div className="absolute centraliseSearch z-20"> */}
       <div
-        className="absolute top-0 left-0  bottom-0 right-0 w-full h-full overflow-hidden z-50"
+        className="absolute top-0 left-0  bottom-0 right-0 w-full h-full overflow-hidden z-300"
       >
         <XIcon
           className="absolute w-8 h-8 crossIcon hover:text-indigo-500 cursor-pointer"
@@ -108,7 +108,7 @@ const Search = ({ setShowSearch }: SearchInterface) => {
       </div>
 
       <div
-        className="absolute top-0 left-0 z-10 w-full h-full bg-black opacity-70 overflow-hidden"
+        className="absolute top-0 left-0 z-200 w-full h-full bg-black opacity-70 overflow-hidden"
         onClick={() => {
           setShowSearch(false);
         }}

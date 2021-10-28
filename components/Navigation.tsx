@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 const tabs = [
   { name: "Most Popular", href: "/" },
   { name: "Top Rated", href: "/" },
+  { name: "Discover", href: "/" },
   { name: "Favourited", href: "/" },
 ];
 
@@ -32,6 +33,10 @@ const Navigation = ({ setShowAlert, currentTab }: NavigationType) => {
         } else if (newTabName === "Favourited") {
           router.push({
             pathname: "/favourited",
+          });
+        } else if (newTabName === "Discover") {
+          router.push({
+            pathname: "/discover/1",
           });
         }
       }

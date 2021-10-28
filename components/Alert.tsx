@@ -11,7 +11,7 @@ const Alert = ({ setShowAlert, text }: AlertType) => {
       {/* <div className="bg-white shadow sm:rounded-lg absolute left-2/4 alertTransform z-20"> */}
       {/* <div className="bg-white shadow sm:rounded-lg absolute left-2/4 alertTransform z-20 "> */}
 
-      <div className="absolute top-0 left-0 w-full h-full z-50  max-h-screen max-w-screen">
+      <div className="absolute top-0 left-0 w-full h-full z-200  max-h-screen max-w-screen">
         <div className="bg-white shadow sm:rounded-lg absolute centralise z-20 ">
           <div className="px-4 py-5 sm:p-6">
             <h3 className="text-lg leading-6 font-medium text-gray-900">
