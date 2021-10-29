@@ -1,5 +1,5 @@
 import MoviesWrapper from "../../components/MoviesWrapper";
-import MoviesGrid from "../../components/MoviesGrid";
+import MoviesContainer from "../../components/MoviesContainer";
 import { useEffect, useState } from "react";
 import { Movies } from "../../utils/types";
 import { getTopRatedMovies } from "../../utils/movie";
@@ -40,7 +40,7 @@ const TopRatedMovies = ({
         currentTab={currentTab}
         setIndex={setIndex}
       >
-        <MoviesGrid movies={movies} favourites={favourites} />
+        <MoviesContainer movies={movies} favourites={favourites} />
       </MoviesWrapper>
     </>
   );

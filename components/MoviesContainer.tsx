@@ -5,7 +5,7 @@ type MoviesGridType = {
   movies: Movies;
   favourites: string[];
 };
-const MoviesGrid = ({ movies, favourites}: MoviesGridType) => {
+const MoviesContainer = ({ movies, favourites}: MoviesGridType) => {
   return (
     <section className="mt-8 pb-16" aria-labelledby="gallery-heading">
       <h2 id="gallery-heading" className="sr-only">
@@ -23,4 +23,4 @@ const MoviesGrid = ({ movies, favourites}: MoviesGridType) => {
   );
 };
 
-export default MoviesGrid;
+export default MoviesContainer;
