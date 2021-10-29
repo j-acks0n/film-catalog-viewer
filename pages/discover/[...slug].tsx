@@ -1,5 +1,5 @@
 import MoviesWrapper from "../../components/MoviesWrapper";
-import MoviesGrid from "../../components/MoviesGrid";
+import MoviesContainer from "../../components/MoviesContainer";
 import { useEffect, useState } from "react";
 import { Genres, Movies } from "../../utils/types";
 import { discoverMovies, getAllGenres } from "../../utils/movie";
@@ -138,7 +138,7 @@ const DiscoverMovies = ({
           </button>
         )}
 
-        <MoviesGrid movies={movies} favourites={favourites} />
+        <MoviesContainer movies={movies} favourites={favourites} />
       </MoviesWrapper>
     </>
   );
