@@ -11,12 +11,12 @@ model User {
   id             Int      @id @default(autoincrement())
   email          String   @unique
   createdAt      DateTime @default(now())
-  favouriteFilms Film[]
+  favouriteFilms String[]
 }
 
-model Film {
-  id        Int      @id @default(autoincrement())
-  imdbID    String   @unique
-  users     User[]
-  createdAt DateTime @default(now())
-}
+// model Movie {
+//   id        Int      @id @default(autoincrement())
+//   movieID    String   @unique
+//   users     User[]
+//   createdAt DateTime @default(now())
+// }
