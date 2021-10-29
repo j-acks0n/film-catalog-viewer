@@ -1,6 +1,6 @@
 import YouTube from "react-youtube";
 import { getSimilarMovies } from "../../utils/movie";
-import MovieBox from "../../components/MovieBox";
+import MovieContainer from "../../components/MovieContainer";
 import { ArrowLeftIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import { Movies } from "../../utils/types";
@@ -46,7 +46,7 @@ const Trailer = ({ trailerId, similarMovies }: TrailerType) => {
               <div className="flex gap-4 overflow-scroll mt-8">
                 {similarMovies.slice(0, 5).map((similarMovie) => {
                   return (
-                    <MovieBox key={similarMovie.id} movie={similarMovie} isFavourited={false} />
+                    <MovieContainer key={similarMovie.id} movie={similarMovie} isFavourited={false} />
                   );
                 })}
               </div>

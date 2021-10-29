@@ -37,7 +37,7 @@ const useHover = () => {
 };
 
 export const startOfPosterLink = "https://image.tmdb.org/t/p/w500";
-const MovieBox = ({ movie, isFavourited }: MovieBoxType) => {
+const MovieContainer = ({ movie, isFavourited }: MovieBoxType) => {
   const [hovered, eventHandlers] = useHover();
   const [favourited, setFavourited] = useState(isFavourited);
   const [heartHovered, setHeartHovered] = useState(false);
@@ -184,7 +184,7 @@ const MovieBox = ({ movie, isFavourited }: MovieBoxType) => {
   );
 };
 
-export default MovieBox;
+export default MovieContainer;
 
 // className={classNames(
 //   hovered ? "" : "group-hover:opacity-75",
