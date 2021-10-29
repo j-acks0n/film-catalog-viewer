@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { startOfPosterLink } from "../../components/MovieBox";
+import { startOfPosterLink } from "../../components/MovieContainer";
 import {
   getMovieById,
   getMovieCasts,

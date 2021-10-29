@@ -1,5 +1,5 @@
 import { Cast } from "../utils/types";
-import { startOfPosterLink } from "./MovieBox";
+import { startOfPosterLink } from "./MovieContainer";
 import Image from "next/image";
 type CastType = {
   cast: Cast;

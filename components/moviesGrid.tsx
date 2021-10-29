@@ -1,4 +1,4 @@
-import MovieBox from "./MovieBox";
+import MovieContainer from "./MovieContainer";
 import type { Movies } from "../utils/types";
 
 type MoviesGridType = {
@@ -16,7 +16,7 @@ const MoviesGrid = ({ movies, favourites}: MoviesGridType) => {
         className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 xl:gap-x-8 justify-items-center "
       >
         {movies.map((movie) => {
-          return <MovieBox key={movie.id} movie={movie} isFavourited={favourites.includes(movie.id.toString()) ? true : false}/>;
+          return <MovieContainer key={movie.id} movie={movie} isFavourited={favourites.includes(movie.id.toString()) ? true : false}/>;
         })}
       </ul>
     </section>
